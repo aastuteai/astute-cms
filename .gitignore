@@ -1,0 +1,39 @@
+/myvenv
+/website/__pycache__
+/website/node_modules
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+.env/
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+
+# Node.js dependencies
+node_modules/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# IDE / Editor settings
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs and temporary files
+logs/
+*.log
+*.out
+*.err
+
+# OS-specific files
+.DS_Store
+Thumbs.db

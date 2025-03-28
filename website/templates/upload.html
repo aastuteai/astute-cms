@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://widget.cloudinary.com/v2.0/global/all.js" type="text/javascript"></script>
+</head>
+<body>
+    <button id="upload_widget">Upload Image</button>
+    <img id="uploaded_image" style="display: none; width: 200px;" />
+
+    <script>
+        const cloudName = "drvmytq0z"; 
+
+        document.getElementById("upload_widget").addEventListener("click", function () {
+            cloudinary.openUploadWidget(
+                {
+                    cloudName: cloudName,
+                    uploadPreset: "your_upload_preset", 
+                    sources: ["local", "url", "camera"], 
+                },
+                (error, result) => {
+                    if (!error && result.event === "success") {
+                        console.log("Uploaded image:", result.info.secure_url);
+                        document.getElementById("uploaded_image").src = result.info.secure_url;
+                        document.getElementById("uploaded_image").style.display = "block";
+                    }
+                }
+            );
+        });
+    </script>
+</body>
+</html>

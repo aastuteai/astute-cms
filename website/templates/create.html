@@ -1,0 +1,92 @@
+{% extends "base.html" %} 
+{% block title %}Create Blog{% endblock %} 
+{% block content %}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css" />
+
+<h1 class="text-3xl font-poppins mx-auto ml-24 mb-9">Create a Blog Post</h1>
+
+<div>
+  <div class="mx-40 bg-gray-50 p-6 rounded-lg shadow-md">
+    <form method="POST" class="space-y-4">
+      <div class="mb-4">
+        <label for="title" class="block font-semibold">Title</label>
+        <input type="text" id="title" name="title"
+          class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500" required />
+      </div>
+
+      <div class="mb-4">
+        <label for="author" class="block font-semibold">Author</label>
+        <input type="text" id="author" name="author"
+          class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500" required />
+      </div>
+
+      <div class="mb-4">
+        <label for="thumbnail" class="block font-semibold">Thumbnail URL</label>
+        <input type="text" id="thumbnail" name="thumbnail"
+          class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500" />
+        <button type="button" id="upload_widget" class="bg-blue-500 border mt-4 border-zinc-600 text-zinc-800 px-4 py-2 rounded-md">Upload Thumbnail</button>
+        <img id="uploaded_image" style="display: none; width: 200px" />
+      </div>
+
+      <div class="mb-4">
+        <label for="content" class="block font-semibold">Content</label>
+        <textarea id="markdown-editor" name="content"
+          class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"></textarea>
+      </div>
+
+      <div class="flex space-x-4">
+        <button type="submit"
+          class="px-5 py-2 bg-gradient-to-br from-purple-600 to-blue-500 text-white rounded-md">
+          Submit
+        </button>
+        <button type="button" id="upload_content"
+          class="px-5 py-2 bg-green-800 ml-4 text-black rounded-md">
+          Add Image
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+  <script src="https://widget.cloudinary.com/v2.0/global/all.js" type="text/javascript"></script>
+
+  <script>
+    var simplemde = new SimpleMDE({ element: document.getElementById("markdown-editor") });
+
+    // Upload to Thumbnail
+    document.getElementById("upload_widget").addEventListener("click", function () {
+      cloudinary.openUploadWidget({
+        cloudName: "drvmytq0z",
+        uploadPreset: "ml_default",
+        sources: ["local", "url", "camera"],
+      }, (error, result) => {
+        if (!error && result.event === "success") {
+          document.getElementById("uploaded_image").src = result.info.secure_url;
+          document.getElementById("uploaded_image").style.display = "block";
+          document.getElementById("thumbnail").value = result.info.secure_url;
+        }
+      });
+    });
+
+    // Upload to Content
+    document.getElementById("upload_content").addEventListener("click", function () {
+      cloudinary.openUploadWidget({
+        cloudName: "drvmytq0z",
+        uploadPreset: "ml_default",
+        sources: ["local", "url", "camera"],
+      }, (error, result) => {
+        if (!error && result.event === "success") {
+          let markdownEditor = simplemde;
+          let imageUrl = result.info.secure_url;
+          let markdownImage = `![Uploaded Image](${imageUrl})`;
+
+          // Insert into editor
+          markdownEditor.value(markdownEditor.value() + "\n\n" + markdownImage);
+        }
+      });
+    });
+  </script>
+
+</div>
+{% endblock %}
